@@ -1,11 +1,30 @@
-flowchart LR
-  A[Simulation Capture<br/>(Training system + Zoom recording)] --> B[Transcript Processing<br/>(cleanup, speaker separation)]
-  B --> C[Knowledge Extraction<br/>(LLM transforms transcript to structured artifacts)]
-  C --> D[Canonical Content Library<br/>(approved, versioned content blocks)]
-  D --> E[RAG / Retrieval<br/>(embed + search content blocks)]
-  E --> F[LLM Orchestration<br/>(response constrained to retrieved content)]
-  F --> G[Guardrails<br/>(intent classifier + output validator + escalation templates)]
-  G --> H[TTS<br/>(convert final text to audio)]
-  F --> I[Logging & Monitoring<br/>(non-PII trace, prompt/model versions, validator outcome)]
-  G --> I
-  H --> I
+# Mortgage LO Knowledge Delivery  
+## System Architecture (Education + Operational Guidance Only)
+
+---
+
+## 1. Scope Definition
+
+Mortgage LO Knowledge Delivery is an **education and operational guidance platform**.
+
+It:
+
+- Uses internal simulation/training recordings only  
+- Extracts structured knowledge from Loan Officer simulations  
+- Generates borrower-facing educational responses  
+- Enforces strict guardrails to prevent loan origination activities  
+
+It does **NOT**:
+
+- Quote rates, APR, or payment amounts  
+- Assess eligibility or qualification  
+- Accept applications  
+- Collect or store borrower financial or identity data  
+- Perform underwriting logic  
+
+This boundary is enforced technically via guardrails and validation layers.
+
+---
+
+## 2. High-Level Architecture Overview
+
