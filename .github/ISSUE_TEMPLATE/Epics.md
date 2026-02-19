@@ -1,5 +1,5 @@
 ---
-name: Mortgage AI – Epic
+name: Mortgage LO App – Epic
 description: High-level initiative spanning multiple features for the Mortgage LO Knowledge System
 title: "[Epic][Mortgage-LO-Knowledge] <Initiative Name>"
 labels:
