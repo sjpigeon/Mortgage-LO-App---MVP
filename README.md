@@ -1,2 +1,2 @@
-# Mortgage-LO-App---MVP
-MVP of Mortgage Loan Officer App that provides info to new clients
+# Mortgage-Loan-Officer-Knowledge-Delivery---MVP
+MVP of system that provides mortgage info to new clients, stopping short of loan origination activities. 
