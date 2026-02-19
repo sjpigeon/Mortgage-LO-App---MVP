@@ -1,31 +1,34 @@
 ---
-name: Mortgage LO App – Epic
-description: High-level initiative spanning multiple features for the Mortgage LO Knowledge System
-title: "[Epic][Mortgage-LO-Knowledge] <Initiative Name>"
+name: Mortgage LO Knowledge Delivery – Epic
+about: High-level initiative spanning multiple features for the Mortgage LO Knowledge Delivery system
+title: "[Epic][Mortgage-LO-Knowledge-Delivery] <Initiative Name>"
 labels:
-  - mortgage-ai
+  - mortgage-lo-knowledge-delivery
   - epic
   - ai-platform
+assignees: []
 body:
 
   - type: markdown
     attributes:
       value: |
         ## Epic Overview
-        This Epic represents a major initiative within the Mortgage Loan Officer Knowledge Delivery System.
-        Epics should align to architectural milestones such as:
-        - Zoom Simulation Capture
-        - Knowledge Extraction Pipeline
-        - Canonical Content Governance
-        - RAG / LLM Orchestration
-        - TTS Delivery Layer
-        - Audit & Risk Controls
+        This Epic represents a major initiative within the Mortgage LO Knowledge Delivery system.
+
+        This system includes:
+        - Zoom-based simulation capture
+        - Transcript processing & structured knowledge extraction
+        - Canonical content governance
+        - Retrieval-Augmented Generation (RAG)
+        - LLM orchestration
+        - Text-to-Speech (TTS) delivery
+        - Audit & compliance guardrails
 
   - type: textarea
     id: objective
     attributes:
       label: Business Objective
-      description: What business outcome does this Epic enable?
+      description: What measurable business outcome does this Epic enable?
     validations:
       required: true
 
@@ -33,11 +36,7 @@ body:
     id: success_metrics
     attributes:
       label: Success Metrics
-      description: Quantifiable outcomes
-      placeholder: |
-        - % reduction in LO repetitive calls
-        - % borrower self-service adoption
-        - Compliance validation success rate
+      description: Define quantifiable outcomes (efficiency, compliance, adoption, etc.)
     validations:
       required: true
 
@@ -45,7 +44,7 @@ body:
     id: scope
     attributes:
       label: Scope
-      description: What is included and excluded?
+      description: Clearly define what is included and excluded.
     validations:
       required: true
 
@@ -66,23 +65,19 @@ body:
     id: child_issues
     attributes:
       label: Child Features / Issues
-      description: List linked feature issues
-      placeholder: |
-        - #123
-        - #124
+      description: Link related feature issues (e.g., #123, #124)
 
   - type: textarea
     id: risks
     attributes:
       label: Strategic Risks
-      description: High-level risks and mitigation approach
+      description: High-level risks and mitigation strategy
 
   - type: textarea
     id: compliance_impact
     attributes:
       label: Compliance & Regulatory Impact
-      description: SAFE Act, CFPB, data retention implications
-
+      description: SAFE Act, CFPB, retention, AI governance implications
 ---
 
 
