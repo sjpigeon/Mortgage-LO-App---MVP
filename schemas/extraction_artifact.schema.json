@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/extraction_artifact.schema.json",
+  "title": "Mortgage LO Knowledge Delivery - Extraction Artifact",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "topic",
+    "summary",
+    "key_steps",
+    "faq_items",
+    "escalation_triggers",
+    "prohibited_topics_detected",
+    "version"
+  ],
+  "properties": {
+    "topic": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 120,
+      "description": "Canonical topic label for routing, indexing, and retrieval."
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 1200,
+      "description": "Short, borrower-friendly synopsis of the content (education + operational guidance only)."
+    },
+    "key_steps": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 30,
+      "description": "Ordered steps that represent the recommended workflow guidance (no rates, eligibility, or application intake).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "step_number",
+          "title",
+          "instruction"
+        ],
+        "properties": {
+          "step_number": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 99,
+            "description": "1-based step order."
+          },
+          "title": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 140,
+            "description": "Short label for the step."
+          },
+          "instruction": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 800,
+            "description": "The step guidance in clear, plain language."
+          },
+          "notes": {
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 800,
+            "description": "Optional clarifying notes."
+          }
+        }
+      }
+    },
+    "faq_items": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 40,
+      "description": "Common borrower questions and approved education-only answers.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "question",
+          "answer"
+        ],
+        "properties": {
+          "question": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 240
+          },
+          "answer": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 1500
+          },
+          "tags": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 12,
+            "items": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 40
+            },
+            "description": "Optional tags to improve retrieval precision."
+          },
+          "related_topics": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 8,
+            "items": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 120
+            },
+            "description": "Optional cross-links to other topics."
+          }
+        }
+      }
+    },
+    "escalation_triggers": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 30,
+      "description": "Conditions that require escalation to a licensed Loan Officer (boundary enforcement).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "category",
+          "trigger_text",
+          "action"
+        ],
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": [
+              "Rate / APR Quote Request",
+              "Payment Calculation Request",
+              "Eligibility / Qualification Assessment",
+              "Loan Product Recommendation",
+              "Application Intake Attempt",
+              "Financial Data Submission",
+              "Identity Data Submission",
+              "Underwriting Decision Request",
+              "Other"
+            ],
+            "description": "Normalized escalation category."
+          },
+          "trigger_text": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 300,
+            "description": "Representative phrase(s) or pattern that indicates the trigger."
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "ESCALATE_TO_LO",
+              "REFUSE_AND_ESCALATE",
+              "REQUEST_REPHRASE_EDUCATION_ONLY"
+            ],
+            "description": "Deterministic system action when triggered."
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "description": "How strictly to block (high = immediate escalation)."
+          }
+        }
+      }
+    },
+    "prohibited_topics_detected": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 20,
+      "description": "Prohibited topics detected in the source transcript during extraction (used for quality control and gating).",
+      "items": {
+        "type": "string",
+        "enum": [
+          "rates",
+          "apr",
+          "payment_calculation",
+          "eligibility",
+          "qualification",
+          "underwriting",
+          "application_intake",
+          "financial_data_capture",
+          "identity_data_capture",
+          "loan_product_recommendation"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-[0-9A-Za-z.-]+)?$",
+      "description": "Artifact schema/content version using semantic versioning, e.g., 1.0.0"
+    }
+  }
+}
