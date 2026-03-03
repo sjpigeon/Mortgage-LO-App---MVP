@@ -1,0 +1,73 @@
+{
+  "topic": "Document Checklist – W2 Borrower",
+  "summary": "This guidance explains the common documents a W2 borrower is typically asked to provide and what to expect after documents are submitted. It focuses on education and operational next steps, and escalates any rate or qualification questions to a licensed Loan Officer.",
+  "key_steps": [
+    {
+      "step_number": 1,
+      "title": "Gather standard identity documents",
+      "instruction": "Prepare a government-issued photo ID and confirm your legal name matches your documents.",
+      "notes": "Do not submit sensitive identifiers (e.g., SSN) through unapproved channels."
+    },
+    {
+      "step_number": 2,
+      "title": "Collect income documentation",
+      "instruction": "Locate your most recent pay stubs and W-2s as requested by your Loan Officer or secure portal."
+    },
+    {
+      "step_number": 3,
+      "title": "Provide asset documentation if requested",
+      "instruction": "If you plan to use funds for closing or down payment, gather recent bank statements for the accounts you’ll use."
+    },
+    {
+      "step_number": 4,
+      "title": "Submit documents through the approved channel",
+      "instruction": "Upload documents through the lender’s secure portal or method provided by your Loan Officer. Avoid email or text unless explicitly instructed.",
+      "notes": "Submitting through the correct channel reduces delays and re-requests."
+    },
+    {
+      "step_number": 5,
+      "title": "Confirm receipt and next steps",
+      "instruction": "After submission, confirm the documents were received and ask what the next milestone is (e.g., initial review, appraisal scheduling)."
+    }
+  ],
+  "faq_items": [
+    {
+      "question": "Why do I need to provide pay stubs and W-2s?",
+      "answer": "These documents help verify employment and income consistency. The exact documents requested can vary by lender process and your situation, and your Loan Officer will confirm what applies to you.",
+      "tags": ["documents", "income", "W2"]
+    },
+    {
+      "question": "Can I email my documents?",
+      "answer": "It’s usually best to use the secure portal or method your Loan Officer provides. If you’re unsure which method to use, ask your Loan Officer for the preferred secure option.",
+      "tags": ["security", "upload"]
+    },
+    {
+      "question": "How long does the document review take?",
+      "answer": "Timelines vary based on volume and completeness. A common way to avoid delays is submitting clear, complete documents and responding quickly if additional items are requested.",
+      "tags": ["timeline", "underwriting_process"],
+      "related_topics": ["Mortgage Process Timeline – Overview"]
+    }
+  ],
+  "escalation_triggers": [
+    {
+      "category": "Rate / APR Quote Request",
+      "trigger_text": "What rate can I get? / What APR will I qualify for?",
+      "action": "ESCALATE_TO_LO",
+      "severity": "high"
+    },
+    {
+      "category": "Eligibility / Qualification Assessment",
+      "trigger_text": "Do I qualify? / Will I be approved?",
+      "action": "REFUSE_AND_ESCALATE",
+      "severity": "high"
+    },
+    {
+      "category": "Financial Data Submission",
+      "trigger_text": "My income is $X and my credit score is Y...",
+      "action": "REFUSE_AND_ESCALATE",
+      "severity": "high"
+    }
+  ],
+  "prohibited_topics_detected": [],
+  "version": "1.0.0"
+}
