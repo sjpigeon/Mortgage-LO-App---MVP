@@ -1,0 +1,54 @@
+{
+  "topic": "Mortgage Process Timeline – Overview",
+  "summary": "This overview explains common stages in a mortgage transaction at a high level so borrowers know what to expect and what actions may be requested. It provides education and operational guidance only and escalates requests for rates, eligibility, or application-specific decisions to a licensed Loan Officer.",
+  "key_steps": [
+    {
+      "step_number": 1,
+      "title": "Understand the major stages",
+      "instruction": "Review the common stages: information gathering, document collection, processing, review, and closing. Specific steps can vary by lender and situation."
+    },
+    {
+      "step_number": 2,
+      "title": "Prepare to provide documents",
+      "instruction": "Keep common documents organized and ready to upload through the secure channel provided by your lender or Loan Officer."
+    },
+    {
+      "step_number": 3,
+      "title": "Respond quickly to follow-up requests",
+      "instruction": "If additional documentation is requested, respond as soon as practical to reduce delays and avoid repeated requests."
+    },
+    {
+      "step_number": 4,
+      "title": "Track key milestones",
+      "instruction": "Ask for the next milestone you should expect (for example, a document review step or a closing preparation step) and note any dates provided by your Loan Officer."
+    }
+  ],
+  "faq_items": [
+    {
+      "question": "How long does the mortgage process take?",
+      "answer": "Timelines vary based on the lender’s workflow, document completeness, and third-party scheduling. The best way to avoid delays is to submit clear documents promptly and respond quickly to follow-up requests.",
+      "tags": ["timeline", "process"]
+    },
+    {
+      "question": "What should I do if I’m not sure what’s needed next?",
+      "answer": "Start by reviewing any outstanding tasks in your lender’s portal. If something is unclear, ask your Loan Officer what the next milestone is and what items are needed to move forward.",
+      "tags": ["next-steps", "portal"]
+    }
+  ],
+  "escalation_triggers": [
+    {
+      "category": "Rate / APR Quote Request",
+      "trigger_text": "What rate can I get? / What APR will I receive?",
+      "action": "ESCALATE_TO_LO",
+      "severity": "high"
+    },
+    {
+      "category": "Eligibility / Qualification Assessment",
+      "trigger_text": "Do I qualify? / Will I be approved?",
+      "action": "REFUSE_AND_ESCALATE",
+      "severity": "high"
+    }
+  ],
+  "prohibited_topics_detected": [],
+  "version": "1.0.0"
+}

@@ -1,0 +1,49 @@
+{
+  "topic": "Title Insurance – Purpose and Basics",
+  "summary": "This content explains what title insurance is in general terms and why it may be part of a home purchase transaction. It is education-only and escalates questions about personal loan terms or pricing to a licensed Loan Officer.",
+  "key_steps": [
+    {
+      "step_number": 1,
+      "title": "Understand what title insurance is",
+      "instruction": "Title insurance is generally intended to help address certain title-related risks associated with property ownership, depending on policy terms."
+    },
+    {
+      "step_number": 2,
+      "title": "Know what a title search is",
+      "instruction": "A title search typically reviews public records related to the property. The exact process can vary by closing agent or title company."
+    },
+    {
+      "step_number": 3,
+      "title": "Review documents you receive",
+      "instruction": "If you receive title-related documentation, review it and ask questions if any terms or coverage details are unclear."
+    }
+  ],
+  "faq_items": [
+    {
+      "question": "Is title insurance the same as homeowners insurance?",
+      "answer": "They are different. Homeowners insurance generally relates to property damage and liability, while title insurance generally relates to title issues based on the policy terms.",
+      "tags": ["title-insurance", "insurance"]
+    },
+    {
+      "question": "Who provides title insurance?",
+      "answer": "Title insurance is typically issued by a title company or insurer. Your closing agent can provide details on the documents you receive.",
+      "tags": ["title", "closing"]
+    }
+  ],
+  "escalation_triggers": [
+    {
+      "category": "Loan Product Recommendation",
+      "trigger_text": "Which loan option should I choose for the lowest costs?",
+      "action": "REFUSE_AND_ESCALATE",
+      "severity": "high"
+    },
+    {
+      "category": "Payment Calculation Request",
+      "trigger_text": "Can you calculate what I will pay each month?",
+      "action": "REFUSE_AND_ESCALATE",
+      "severity": "high"
+    }
+  ],
+  "prohibited_topics_detected": [],
+  "version": "1.0.0"
+}

@@ -1,0 +1,54 @@
+{
+  "topic": "Understanding Escrow Accounts",
+  "summary": "This content explains what an escrow account is and why it may be used during a mortgage transaction. It provides education-only guidance and directs any questions about pricing, rates, or personal qualification to a licensed Loan Officer.",
+  "key_steps": [
+    {
+      "step_number": 1,
+      "title": "Learn what escrow means",
+      "instruction": "An escrow account is commonly used to collect and pay certain ongoing costs, such as property taxes and insurance, depending on lender and loan requirements."
+    },
+    {
+      "step_number": 2,
+      "title": "Understand what may be included",
+      "instruction": "Review which items are commonly associated with escrow (for example, taxes and insurance) and confirm the specific items for your situation using your lender’s documents."
+    },
+    {
+      "step_number": 3,
+      "title": "Review your disclosures carefully",
+      "instruction": "When you receive lender-provided disclosures, check how escrow is described and ask questions if anything is unclear."
+    },
+    {
+      "step_number": 4,
+      "title": "Ask about changes over time",
+      "instruction": "Escrow amounts can change when taxes or insurance change. If you see a change, ask how it was calculated and what changed."
+    }
+  ],
+  "faq_items": [
+    {
+      "question": "Is an escrow account always required?",
+      "answer": "Whether escrow is required can vary by lender, loan program, and other factors. Your Loan Officer can confirm what applies to your specific loan and documentation.",
+      "tags": ["escrow", "requirements"]
+    },
+    {
+      "question": "Why might my escrow payment change?",
+      "answer": "Escrow amounts can change if the underlying costs change, such as property taxes or insurance premiums. Your lender may provide an analysis explaining the change.",
+      "tags": ["escrow", "changes"]
+    }
+  ],
+  "escalation_triggers": [
+    {
+      "category": "Loan Product Recommendation",
+      "trigger_text": "Which loan is best for me given my situation?",
+      "action": "REFUSE_AND_ESCALATE",
+      "severity": "high"
+    },
+    {
+      "category": "Payment Calculation Request",
+      "trigger_text": "What will my monthly payment be with escrow?",
+      "action": "REFUSE_AND_ESCALATE",
+      "severity": "high"
+    }
+  ],
+  "prohibited_topics_detected": [],
+  "version": "1.0.0"
+}

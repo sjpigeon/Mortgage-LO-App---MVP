@@ -1,0 +1,54 @@
+{
+  "topic": "Closing Day – What Happens",
+  "summary": "This content explains common steps borrowers may experience around closing day, including signing documents and confirming logistics. It does not provide pricing, qualification, or loan origination guidance and escalates those requests to a licensed Loan Officer.",
+  "key_steps": [
+    {
+      "step_number": 1,
+      "title": "Confirm your closing appointment details",
+      "instruction": "Review the time, location, and signing method (in person or remote, if available) as provided by your lender or closing agent."
+    },
+    {
+      "step_number": 2,
+      "title": "Review your closing documents",
+      "instruction": "Read the documents you receive ahead of time when possible, and write down questions to ask during the signing."
+    },
+    {
+      "step_number": 3,
+      "title": "Bring required identification",
+      "instruction": "Bring the identification requested by the closing agent and confirm any additional requirements prior to the appointment."
+    },
+    {
+      "step_number": 4,
+      "title": "Ask questions before signing",
+      "instruction": "If you do not understand a document, ask for clarification before signing. Do not feel pressured to sign something you do not understand."
+    }
+  ],
+  "faq_items": [
+    {
+      "question": "What documents do I sign at closing?",
+      "answer": "The specific documents vary, but typically include several legal and financial documents. Your closing agent and Loan Officer can explain what each document is for during the signing.",
+      "tags": ["closing", "documents"]
+    },
+    {
+      "question": "What if something looks different than expected?",
+      "answer": "If you notice a difference, pause and ask questions. Your Loan Officer or closing agent can help you understand changes and next steps.",
+      "tags": ["closing", "review"]
+    }
+  ],
+  "escalation_triggers": [
+    {
+      "category": "Rate / APR Quote Request",
+      "trigger_text": "Can you confirm my interest rate or APR?",
+      "action": "ESCALATE_TO_LO",
+      "severity": "high"
+    },
+    {
+      "category": "Payment Calculation Request",
+      "trigger_text": "What will my monthly payment be after closing?",
+      "action": "REFUSE_AND_ESCALATE",
+      "severity": "high"
+    }
+  ],
+  "prohibited_topics_detected": [],
+  "version": "1.0.0"
+}
