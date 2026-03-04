@@ -1,0 +1,49 @@
+{
+  "topic": "Loan Estimate – What It Is",
+  "summary": "This content explains what a Loan Estimate is in general terms and how borrowers can use it to understand key parts of a loan. It is education-only and does not provide pricing, eligibility, or loan origination decisions.",
+  "key_steps": [
+    {
+      "step_number": 1,
+      "title": "Identify the purpose of the document",
+      "instruction": "A Loan Estimate is a standardized form commonly used to summarize key loan terms and estimated costs, depending on the lender and transaction."
+    },
+    {
+      "step_number": 2,
+      "title": "Review key sections",
+      "instruction": "Review sections related to loan terms, projected payments, and closing costs. If you do not understand a line item, note it for clarification."
+    },
+    {
+      "step_number": 3,
+      "title": "Ask questions about unclear items",
+      "instruction": "If anything is unclear, ask your Loan Officer to explain the meaning of the section and what it represents."
+    }
+  ],
+  "faq_items": [
+    {
+      "question": "Does the Loan Estimate guarantee my final terms?",
+      "answer": "Not necessarily. Some details can change based on final information and documentation. Your Loan Officer can explain what items are fixed and what items can vary.",
+      "tags": ["loan-estimate", "documents"]
+    },
+    {
+      "question": "What should I do if I see fees I don’t recognize?",
+      "answer": "Write down the fee name and section where it appears, then ask your Loan Officer or closing agent what the fee represents and whether it is required.",
+      "tags": ["fees", "review"]
+    }
+  ],
+  "escalation_triggers": [
+    {
+      "category": "Rate / APR Quote Request",
+      "trigger_text": "What is my exact rate or APR on this document?",
+      "action": "ESCALATE_TO_LO",
+      "severity": "high"
+    },
+    {
+      "category": "Eligibility / Qualification Assessment",
+      "trigger_text": "Does this mean I qualify or will be approved?",
+      "action": "REFUSE_AND_ESCALATE",
+      "severity": "high"
+    }
+  ],
+  "prohibited_topics_detected": [],
+  "version": "1.0.0"
+}

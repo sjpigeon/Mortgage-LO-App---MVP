@@ -1,0 +1,54 @@
+{
+  "topic": "Closing Disclosure – What It Is",
+  "summary": "This content explains what a Closing Disclosure is in general terms and how borrowers can use it to prepare for closing. It provides education and operational guidance only and escalates any request for personal pricing or qualification decisions.",
+  "key_steps": [
+    {
+      "step_number": 1,
+      "title": "Understand the purpose of the disclosure",
+      "instruction": "A Closing Disclosure is a standardized document commonly used to summarize final loan terms and closing costs close to the closing date."
+    },
+    {
+      "step_number": 2,
+      "title": "Compare it with earlier documents",
+      "instruction": "Compare key sections with earlier disclosures and note any differences you want explained."
+    },
+    {
+      "step_number": 3,
+      "title": "Clarify any changes before closing",
+      "instruction": "If you see changes you do not understand, ask questions before the signing so you have time to review."
+    },
+    {
+      "step_number": 4,
+      "title": "Confirm logistics",
+      "instruction": "Confirm closing appointment logistics and any required steps requested by your closing agent."
+    }
+  ],
+  "faq_items": [
+    {
+      "question": "Why might my Closing Disclosure look different than earlier estimates?",
+      "answer": "Some items can change as information becomes final, third-party fees are confirmed, or adjustments occur. Ask your Loan Officer or closing agent to explain specific line items.",
+      "tags": ["closing-disclosure", "review"]
+    },
+    {
+      "question": "What if I have questions right before closing?",
+      "answer": "Write down your questions and contact your Loan Officer or closing agent as soon as possible. It’s better to clarify before signing.",
+      "tags": ["closing", "questions"]
+    }
+  ],
+  "escalation_triggers": [
+    {
+      "category": "Payment Calculation Request",
+      "trigger_text": "Can you calculate my exact monthly payment?",
+      "action": "REFUSE_AND_ESCALATE",
+      "severity": "high"
+    },
+    {
+      "category": "Rate / APR Quote Request",
+      "trigger_text": "Confirm my final interest rate or APR.",
+      "action": "ESCALATE_TO_LO",
+      "severity": "high"
+    }
+  ],
+  "prohibited_topics_detected": [],
+  "version": "1.0.0"
+}

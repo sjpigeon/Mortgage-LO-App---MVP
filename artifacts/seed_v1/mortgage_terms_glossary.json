@@ -1,0 +1,51 @@
+{
+  "topic": "Mortgage Terminology – Common Terms",
+  "summary": "This glossary defines common mortgage terms in plain language to help borrowers understand the process. It is education-only and does not provide personalized pricing, eligibility decisions, or application processing.",
+  "key_steps": [
+    {
+      "step_number": 1,
+      "title": "Look up unfamiliar terms",
+      "instruction": "When you see an unfamiliar term in a lender document, look it up and note where it appears so you can ask questions with context."
+    },
+    {
+      "step_number": 2,
+      "title": "Ask for clarification when needed",
+      "instruction": "If a definition does not match how a term is used in your specific document, ask your Loan Officer or closing agent to clarify."
+    }
+  ],
+  "faq_items": [
+    {
+      "question": "What is APR?",
+      "answer": "APR is a standardized measure that can reflect certain costs of borrowing expressed as a rate. For any questions about your exact APR or pricing, speak directly with your Loan Officer.",
+      "tags": ["glossary", "apr"]
+    },
+    {
+      "question": "What is escrow?",
+      "answer": "Escrow commonly refers to a process or account used to manage certain payments, such as taxes and insurance, depending on lender requirements and your loan setup.",
+      "tags": ["glossary", "escrow"],
+      "related_topics": ["Understanding Escrow Accounts"]
+    },
+    {
+      "question": "What is underwriting?",
+      "answer": "Underwriting is generally a review stage where documentation is checked according to lender requirements. It may include follow-up questions or additional document requests.",
+      "tags": ["glossary", "underwriting"],
+      "related_topics": ["Underwriting Review – High-Level Overview"]
+    }
+  ],
+  "escalation_triggers": [
+    {
+      "category": "Rate / APR Quote Request",
+      "trigger_text": "What is my APR or rate?",
+      "action": "ESCALATE_TO_LO",
+      "severity": "high"
+    },
+    {
+      "category": "Eligibility / Qualification Assessment",
+      "trigger_text": "Do these terms mean I qualify?",
+      "action": "REFUSE_AND_ESCALATE",
+      "severity": "high"
+    }
+  ],
+  "prohibited_topics_detected": [],
+  "version": "1.0.0"
+}

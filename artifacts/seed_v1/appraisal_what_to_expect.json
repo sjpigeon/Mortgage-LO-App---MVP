@@ -1,0 +1,54 @@
+{
+  "topic": "Appraisal – What to Expect",
+  "summary": "This content explains what an appraisal is, why it is used, and common steps in the appraisal process. It provides education and operational guidance only and escalates any questions requesting personal qualification or pricing to a licensed Loan Officer.",
+  "key_steps": [
+    {
+      "step_number": 1,
+      "title": "Understand the purpose of an appraisal",
+      "instruction": "An appraisal is typically used to provide an independent opinion of property value and may be part of the lender’s process."
+    },
+    {
+      "step_number": 2,
+      "title": "Know what happens during the appointment",
+      "instruction": "An appraiser may inspect the property and compare it with similar properties. The exact method can vary by property type and location."
+    },
+    {
+      "step_number": 3,
+      "title": "Watch for scheduling updates",
+      "instruction": "If an appointment is needed, follow instructions provided by your lender or Loan Officer regarding access and scheduling."
+    },
+    {
+      "step_number": 4,
+      "title": "Review outcomes with your Loan Officer",
+      "instruction": "If the appraisal results in questions or next steps, discuss them with your Loan Officer to understand what happens next."
+    }
+  ],
+  "faq_items": [
+    {
+      "question": "Is the appraisal the same as a home inspection?",
+      "answer": "They are different. An appraisal is commonly related to valuation for the lender process, while an inspection is typically focused on condition and issues for the buyer’s information.",
+      "tags": ["appraisal", "inspection"]
+    },
+    {
+      "question": "What can cause appraisal delays?",
+      "answer": "Scheduling availability, access coordination, and complexity of the property can affect timing. Providing quick responses to scheduling requests can help reduce delays.",
+      "tags": ["timeline", "appraisal"]
+    }
+  ],
+  "escalation_triggers": [
+    {
+      "category": "Underwriting Decision Request",
+      "trigger_text": "Will this appraisal guarantee my loan approval?",
+      "action": "REFUSE_AND_ESCALATE",
+      "severity": "high"
+    },
+    {
+      "category": "Eligibility / Qualification Assessment",
+      "trigger_text": "Does this appraisal mean I qualify?",
+      "action": "REFUSE_AND_ESCALATE",
+      "severity": "high"
+    }
+  ],
+  "prohibited_topics_detected": [],
+  "version": "1.0.0"
+}

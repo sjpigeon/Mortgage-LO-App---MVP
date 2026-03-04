@@ -1,0 +1,54 @@
+{
+  "topic": "Underwriting Review – High-Level Overview",
+  "summary": "This content provides a high-level explanation of what underwriting review generally means and why additional documents may be requested. It is education-only and does not provide approval predictions or eligibility decisions.",
+  "key_steps": [
+    {
+      "step_number": 1,
+      "title": "Understand the purpose of review",
+      "instruction": "Underwriting review is commonly a stage where documentation is reviewed for completeness and consistency according to lender requirements."
+    },
+    {
+      "step_number": 2,
+      "title": "Expect follow-up requests",
+      "instruction": "It is common to receive follow-up requests for clarification or additional documents. Responding promptly helps keep the process moving."
+    },
+    {
+      "step_number": 3,
+      "title": "Submit documents through secure channels",
+      "instruction": "Provide requested items using the lender-approved secure portal or method. Avoid sharing sensitive details through unapproved channels."
+    },
+    {
+      "step_number": 4,
+      "title": "Ask what is still outstanding",
+      "instruction": "If you are unsure what is pending, ask your Loan Officer what items are still needed to complete the review stage."
+    }
+  ],
+  "faq_items": [
+    {
+      "question": "Does underwriting mean I’m approved?",
+      "answer": "Not necessarily. Underwriting review is a stage in the process and may include follow-up questions or document requests. Your Loan Officer can explain your current status based on official updates.",
+      "tags": ["underwriting", "process"]
+    },
+    {
+      "question": "Why am I being asked for more documents?",
+      "answer": "Additional documents may be requested to clarify information or meet lender requirements. Providing clear, complete documents reduces repeated requests.",
+      "tags": ["documents", "underwriting"]
+    }
+  ],
+  "escalation_triggers": [
+    {
+      "category": "Underwriting Decision Request",
+      "trigger_text": "Am I approved? / Will I be approved?",
+      "action": "REFUSE_AND_ESCALATE",
+      "severity": "high"
+    },
+    {
+      "category": "Eligibility / Qualification Assessment",
+      "trigger_text": "Do I qualify based on my income or credit?",
+      "action": "REFUSE_AND_ESCALATE",
+      "severity": "high"
+    }
+  ],
+  "prohibited_topics_detected": [],
+  "version": "1.0.0"
+}

@@ -1,0 +1,54 @@
+{
+  "topic": "Self-Employed Borrower – Document Overview",
+  "summary": "This content provides a general overview of document categories that may be requested from self-employed borrowers. It is education-only and does not collect personal financial details, determine eligibility, or provide loan origination decisions.",
+  "key_steps": [
+    {
+      "step_number": 1,
+      "title": "Confirm what your lender requests",
+      "instruction": "Self-employed documentation needs vary. Use your lender’s portal or your Loan Officer’s instructions as the source of truth for what to provide."
+    },
+    {
+      "step_number": 2,
+      "title": "Gather business and income documentation",
+      "instruction": "Collect the business and income documents requested by your lender, and ensure they are complete and legible."
+    },
+    {
+      "step_number": 3,
+      "title": "Separate personal and business materials",
+      "instruction": "Organize documents clearly so it is easy to identify which items relate to personal vs business information."
+    },
+    {
+      "step_number": 4,
+      "title": "Submit through the approved secure channel",
+      "instruction": "Upload documents through the secure portal or method provided. Avoid sharing sensitive details through unapproved channels."
+    }
+  ],
+  "faq_items": [
+    {
+      "question": "Why might self-employed borrowers be asked for additional documentation?",
+      "answer": "Documentation may be needed to understand income stability and business context according to lender requirements. Your Loan Officer can explain the specific requests for your situation.",
+      "tags": ["documents", "self-employed"]
+    },
+    {
+      "question": "What if I don’t have a document that was requested?",
+      "answer": "If you cannot provide an item, let your Loan Officer know and ask for guidance on acceptable alternatives within the lender’s process.",
+      "tags": ["documents", "alternatives"]
+    }
+  ],
+  "escalation_triggers": [
+    {
+      "category": "Financial Data Submission",
+      "trigger_text": "Here are my income numbers and bank balances—can you tell me if I qualify?",
+      "action": "REFUSE_AND_ESCALATE",
+      "severity": "high"
+    },
+    {
+      "category": "Eligibility / Qualification Assessment",
+      "trigger_text": "Based on my business income, will I be approved?",
+      "action": "REFUSE_AND_ESCALATE",
+      "severity": "high"
+    }
+  ],
+  "prohibited_topics_detected": [],
+  "version": "1.0.0"
+}
