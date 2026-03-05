@@ -1,0 +1,3 @@
+name: mortgage-lo-rag
+runtime: python
+description: Serverless RAG infrastructure for Mortgage LO App
