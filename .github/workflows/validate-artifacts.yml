@@ -2,7 +2,17 @@ name: Validate Artifacts
 
 on:
   pull_request:
+    paths:
+      - "artifacts/**/*.json"
+      - "schemas/extraction_artifact.schema.json"
+      - "scripts/validate_artifacts.py"
+      - ".github/workflows/validate-artifacts.yml"
   push:
+    paths:
+      - "artifacts/**/*.json"
+      - "schemas/extraction_artifact.schema.json"
+      - "scripts/validate_artifacts.py"
+      - ".github/workflows/validate-artifacts.yml"
 
 jobs:
   validate:
