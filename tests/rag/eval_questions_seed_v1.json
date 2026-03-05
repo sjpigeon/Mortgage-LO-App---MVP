@@ -1,0 +1,252 @@
+[
+  {
+    "id": "Q001",
+    "question": "Can you give me a high-level overview of the mortgage process timeline?",
+    "expected_topic": "Mortgage Process Timeline - Overview"
+  },
+  {
+    "id": "Q002",
+    "question": "What are the main stages of getting a mortgage from start to finish?",
+    "expected_topic": "Mortgage Process Timeline - Overview"
+  },
+  {
+    "id": "Q003",
+    "question": "What should I expect next in the mortgage process?",
+    "expected_topic": "Mortgage Process Timeline - Overview"
+  },
+  {
+    "id": "Q004",
+    "question": "How do I keep the mortgage process moving without delays?",
+    "expected_topic": "Mortgage Process Timeline - Overview"
+  },
+  {
+    "id": "Q005",
+    "question": "What’s the best way to track milestones during the mortgage process?",
+    "expected_topic": "Mortgage Process Timeline - Overview"
+  },
+  {
+    "id": "Q006",
+    "question": "What is an escrow account and why do people have one?",
+    "expected_topic": "Understanding Escrow Accounts"
+  },
+  {
+    "id": "Q007",
+    "question": "What kinds of costs might be paid through escrow?",
+    "expected_topic": "Understanding Escrow Accounts"
+  },
+  {
+    "id": "Q008",
+    "question": "Why would my escrow amount change over time?",
+    "expected_topic": "Understanding Escrow Accounts"
+  },
+  {
+    "id": "Q009",
+    "question": "Do all mortgages include escrow?",
+    "expected_topic": "Understanding Escrow Accounts"
+  },
+  {
+    "id": "Q010",
+    "question": "Where can I confirm what escrow includes for my loan paperwork?",
+    "expected_topic": "Understanding Escrow Accounts"
+  },
+  {
+    "id": "Q011",
+    "question": "What is the purpose of a home appraisal in a mortgage?",
+    "expected_topic": "Appraisal - What to Expect"
+  },
+  {
+    "id": "Q012",
+    "question": "What happens during an appraisal appointment?",
+    "expected_topic": "Appraisal - What to Expect"
+  },
+  {
+    "id": "Q013",
+    "question": "Is an appraisal the same thing as a home inspection?",
+    "expected_topic": "Appraisal - What to Expect"
+  },
+  {
+    "id": "Q014",
+    "question": "What can cause appraisal timing to take longer?",
+    "expected_topic": "Appraisal - What to Expect"
+  },
+  {
+    "id": "Q015",
+    "question": "Who schedules the appraisal and what should I do to prepare?",
+    "expected_topic": "Appraisal - What to Expect"
+  },
+  {
+    "id": "Q016",
+    "question": "What happens on closing day?",
+    "expected_topic": "Closing Day - What Happens"
+  },
+  {
+    "id": "Q017",
+    "question": "What should I bring with me to closing?",
+    "expected_topic": "Closing Day - What Happens"
+  },
+  {
+    "id": "Q018",
+    "question": "What if I don’t understand a document at closing?",
+    "expected_topic": "Closing Day - What Happens"
+  },
+  {
+    "id": "Q019",
+    "question": "How do I confirm the time and place for my closing appointment?",
+    "expected_topic": "Closing Day - What Happens"
+  },
+  {
+    "id": "Q020",
+    "question": "What documents do I typically sign at closing?",
+    "expected_topic": "Closing Day - What Happens"
+  },
+  {
+    "id": "Q021",
+    "question": "What does underwriting mean in simple terms?",
+    "expected_topic": "Underwriting Review - High-Level Overview"
+  },
+  {
+    "id": "Q022",
+    "question": "Why am I being asked for more documents during underwriting?",
+    "expected_topic": "Underwriting Review - High-Level Overview"
+  },
+  {
+    "id": "Q023",
+    "question": "What should I do when underwriting requests clarification?",
+    "expected_topic": "Underwriting Review - High-Level Overview"
+  },
+  {
+    "id": "Q024",
+    "question": "Does being in underwriting mean I’m already approved?",
+    "expected_topic": "Underwriting Review - High-Level Overview"
+  },
+  {
+    "id": "Q025",
+    "question": "What’s the best way to submit documents during the review stage?",
+    "expected_topic": "Underwriting Review - High-Level Overview"
+  },
+  {
+    "id": "Q026",
+    "question": "What is title insurance and why is it part of buying a home?",
+    "expected_topic": "Title Insurance - Purpose and Basics"
+  },
+  {
+    "id": "Q027",
+    "question": "What is a title search?",
+    "expected_topic": "Title Insurance - Purpose and Basics"
+  },
+  {
+    "id": "Q028",
+    "question": "Is title insurance the same as homeowners insurance?",
+    "expected_topic": "Title Insurance - Purpose and Basics"
+  },
+  {
+    "id": "Q029",
+    "question": "Who provides title insurance documents?",
+    "expected_topic": "Title Insurance - Purpose and Basics"
+  },
+  {
+    "id": "Q030",
+    "question": "Where do I review title-related paperwork if I receive it?",
+    "expected_topic": "Title Insurance - Purpose and Basics"
+  },
+  {
+    "id": "Q031",
+    "question": "What is a Loan Estimate and what is it used for?",
+    "expected_topic": "Loan Estimate - What It Is"
+  },
+  {
+    "id": "Q032",
+    "question": "Which sections of the Loan Estimate should I review closely?",
+    "expected_topic": "Loan Estimate - What It Is"
+  },
+  {
+    "id": "Q033",
+    "question": "If I see a fee I don’t recognize on the Loan Estimate, what should I do?",
+    "expected_topic": "Loan Estimate - What It Is"
+  },
+  {
+    "id": "Q034",
+    "question": "Does the Loan Estimate guarantee the final terms?",
+    "expected_topic": "Loan Estimate - What It Is"
+  },
+  {
+    "id": "Q035",
+    "question": "How should I ask questions about line items on the Loan Estimate?",
+    "expected_topic": "Loan Estimate - What It Is"
+  },
+  {
+    "id": "Q036",
+    "question": "What is a Closing Disclosure and when do I review it?",
+    "expected_topic": "Closing Disclosure - What It Is"
+  },
+  {
+    "id": "Q037",
+    "question": "How do I compare the Closing Disclosure to earlier documents?",
+    "expected_topic": "Closing Disclosure - What It Is"
+  },
+  {
+    "id": "Q038",
+    "question": "Why might the Closing Disclosure change from earlier estimates?",
+    "expected_topic": "Closing Disclosure - What It Is"
+  },
+  {
+    "id": "Q039",
+    "question": "What should I do if I have questions right before closing?",
+    "expected_topic": "Closing Disclosure - What It Is"
+  },
+  {
+    "id": "Q040",
+    "question": "What logistics should I confirm after receiving the Closing Disclosure?",
+    "expected_topic": "Closing Disclosure - What It Is"
+  },
+  {
+    "id": "Q041",
+    "question": "What documents are commonly requested for someone who is self-employed?",
+    "expected_topic": "Self-Employed Borrower - Document Overview"
+  },
+  {
+    "id": "Q042",
+    "question": "Why do self-employed borrowers often need extra documentation?",
+    "expected_topic": "Self-Employed Borrower - Document Overview"
+  },
+  {
+    "id": "Q043",
+    "question": "How should I organize self-employed documentation for submission?",
+    "expected_topic": "Self-Employed Borrower - Document Overview"
+  },
+  {
+    "id": "Q044",
+    "question": "What if I can’t provide a document that was requested as self-employed?",
+    "expected_topic": "Self-Employed Borrower - Document Overview"
+  },
+  {
+    "id": "Q045",
+    "question": "What’s the safest way to submit business-related documents?",
+    "expected_topic": "Self-Employed Borrower - Document Overview"
+  },
+  {
+    "id": "Q046",
+    "question": "Can you define common mortgage terms in plain language?",
+    "expected_topic": "Mortgage Terminology - Common Terms"
+  },
+  {
+    "id": "Q047",
+    "question": "What does APR mean (as a definition)?",
+    "expected_topic": "Mortgage Terminology - Common Terms"
+  },
+  {
+    "id": "Q048",
+    "question": "What does underwriting mean (as a definition)?",
+    "expected_topic": "Mortgage Terminology - Common Terms"
+  },
+  {
+    "id": "Q049",
+    "question": "What does escrow mean (as a definition)?",
+    "expected_topic": "Mortgage Terminology - Common Terms"
+  },
+  {
+    "id": "Q050",
+    "question": "Where can I look up definitions for terms I see in my lender documents?",
+    "expected_topic": "Mortgage Terminology - Common Terms"
+  }
+]
