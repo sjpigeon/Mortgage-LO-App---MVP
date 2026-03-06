@@ -69,7 +69,7 @@ network_policy = aws_native.opensearchserverless.SecurityPolicy(
             }
         ]
     ),
-    opts=pulumi.ResourceOptions(import_=f"{network_policy_name}|network"),
+    opts=pulumi.ResourceOptions(import_=f"network|{network_policy_name}"),
 )
 
 collection = aws_native.opensearchserverless.Collection(
