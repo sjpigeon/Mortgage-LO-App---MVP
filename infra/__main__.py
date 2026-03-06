@@ -31,12 +31,6 @@ artifacts_bucket = aws.s3.Bucket(
     force_destroy=True,
 )
 
-collection = aws_native.opensearchserverless.Collection(
-    "ragCollection",
-    name=collection_name,
-    type="VECTORSEARCH",
-)
-
 encryption_policy = aws_native.opensearchserverless.SecurityPolicy(
     "ragEncryptionPolicy",
     name=encryption_policy_name,
@@ -75,6 +69,13 @@ network_policy = aws_native.opensearchserverless.SecurityPolicy(
             }
         ]
     ),
+)
+
+collection = aws_native.opensearchserverless.Collection(
+    "ragCollection",
+    name=collection_name,
+    type="VECTORSEARCH",
+    opts=pulumi.ResourceOptions(depends_on=[encryption_policy, network_policy]),
 )
 
 lambda_role = aws.iam.Role(
