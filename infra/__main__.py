@@ -9,10 +9,20 @@ project = pulumi.get_project()
 stack = pulumi.get_stack()
 
 raw_prefix = config.get("name") or f"{project}-{stack}"
-safe_prefix = re.sub(r"[^a-z0-9-]", "-", raw_prefix.lower())
+safe_prefix = re.sub(r"[^a-z0-9-]", "-", raw_prefix.lower()).strip("-")
+if not safe_prefix:
+    safe_prefix = "app"
+
+def limited_name(suffix: str, limit: int = 32) -> str:
+    name = f"{safe_prefix}-{suffix}"
+    name = re.sub(r"-+", "-", name).strip("-")
+    return name[:limit].rstrip("-")
 
 bucket_name = f"{safe_prefix}-artifacts"[:63].strip("-")
 collection_name = f"{safe_prefix[:20]}-rag".strip("-")
+encryption_policy_name = limited_name("enc")
+network_policy_name = limited_name("net")
+access_policy_name = limited_name("access")
 index_name = "artifacts"
 
 artifacts_bucket = aws.s3.Bucket(
@@ -29,6 +39,7 @@ collection = aws_native.opensearchserverless.Collection(
 
 encryption_policy = aws_native.opensearchserverless.SecurityPolicy(
     "ragEncryptionPolicy",
+    name=encryption_policy_name,
     type="encryption",
     policy=json.dumps(
         {
@@ -45,6 +56,7 @@ encryption_policy = aws_native.opensearchserverless.SecurityPolicy(
 
 network_policy = aws_native.opensearchserverless.SecurityPolicy(
     "ragNetworkPolicy",
+    name=network_policy_name,
     type="network",
     policy=json.dumps(
         [
@@ -127,6 +139,7 @@ aws.iam.RolePolicyAttachment(
 
 access_policy = aws_native.opensearchserverless.AccessPolicy(
     "ragAccessPolicy",
+    name=access_policy_name,
     type="data",
     policy=pulumi.Output.all(lambda_role.arn).apply(
         lambda args: json.dumps(
