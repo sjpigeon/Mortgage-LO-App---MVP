@@ -2,6 +2,7 @@ import json
 import re
 import pulumi
 import pulumi_aws as aws
+import pulumi_aws.opensearchserverless as opensearchserverless
 
 config = pulumi.Config()
 project = pulumi.get_project()
@@ -20,13 +21,13 @@ artifacts_bucket = aws.s3.Bucket(
     force_destroy=True,
 )
 
-collection = aws.opensearchserverless.Collection(
+collection = opensearchserverless.Collection(
     "ragCollection",
     name=collection_name,
     type="VECTORSEARCH",
 )
 
-encryption_policy = aws.opensearchserverless.SecurityPolicy(
+encryption_policy = opensearchserverless.SecurityPolicy(
     "ragEncryptionPolicy",
     type="encryption",
     policy=json.dumps(
@@ -42,7 +43,7 @@ encryption_policy = aws.opensearchserverless.SecurityPolicy(
     ),
 )
 
-network_policy = aws.opensearchserverless.SecurityPolicy(
+network_policy = opensearchserverless.SecurityPolicy(
     "ragNetworkPolicy",
     type="network",
     policy=json.dumps(
@@ -124,7 +125,7 @@ aws.iam.RolePolicyAttachment(
     policy_arn=lambda_policy.arn,
 )
 
-access_policy = aws.opensearchserverless.AccessPolicy(
+access_policy = opensearchserverless.AccessPolicy(
     "ragAccessPolicy",
     type="data",
     policy=pulumi.Output.all(lambda_role.arn).apply(
