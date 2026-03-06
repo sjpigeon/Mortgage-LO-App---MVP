@@ -154,10 +154,20 @@ access_policy = aws_native.opensearchserverless.AccessPolicy(
                         {
                             "ResourceType": "collection",
                             "Resource": [f"collection/{collection_name}"],
+                            "Permission": [
+                                "aoss:DescribeCollectionItems",
+                                "aoss:CreateCollectionItems",
+                                "aoss:UpdateCollectionItems",
+                                "aoss:DeleteCollectionItems",
+                            ],
                         },
                         {
                             "ResourceType": "index",
                             "Resource": [f"index/{collection_name}/*"],
+                            "Permission": [
+                                "aoss:ReadDocument",
+                                "aoss:WriteDocument",
+                            ],
                         },
                     ],
                     "Principal": [args[0]],
