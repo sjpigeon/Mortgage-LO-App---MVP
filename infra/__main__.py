@@ -100,7 +100,7 @@ lambda_role = aws.iam.Role(
 
 lambda_policy = aws.iam.Policy(
     "ragLambdaPolicy",
-    policy=json.dumps(
+    policy=pulumi.Output.json_dumps(
         {
             "Version": "2012-10-17",
             "Statement": [
