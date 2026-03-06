@@ -28,6 +28,11 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: us-west-2
 
+      - name: Select Pulumi stack
+        run: pulumi -C infra stack select dev || pulumi -C infra stack init dev
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+
       - name: Set AWS region config
         run: pulumi -C infra config set aws:region us-west-2
         env:
