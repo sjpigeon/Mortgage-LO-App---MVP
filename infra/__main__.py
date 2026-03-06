@@ -69,6 +69,14 @@ network_policy = aws_native.opensearchserverless.SecurityPolicy(
             }
         ]
     ),
+    opts=pulumi.ResourceOptions(import_=f"{network_policy_name}|network"),
+)
+
+collection = aws_native.opensearchserverless.Collection(
+    "ragCollection",
+    name=collection_name,
+    type="VECTORSEARCH",
+    opts=pulumi.ResourceOptions(depends_on=[encryption_policy, network_policy]),
 )
 
 collection = aws_native.opensearchserverless.Collection(
