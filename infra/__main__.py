@@ -172,6 +172,7 @@ access_policy = aws_native.opensearchserverless.AccessPolicy(
             ]
         )
     ),
+    opts=pulumi.ResourceOptions(ignore_changes=["policy"]),
 )
 
 lambda_env = {
