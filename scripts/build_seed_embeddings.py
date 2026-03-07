@@ -1,7 +1,9 @@
 import argparse
+import hashlib
 import json
 import os
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -36,6 +38,11 @@ def parse_args() -> argparse.Namespace:
         "--model-id",
         default=os.getenv("BEDROCK_MODEL_ID", DEFAULT_MODEL_ID),
         help="Bedrock model id (or BEDROCK_MODEL_ID)",
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Rebuild embeddings even if source version/content/model is unchanged",
     )
     return parser.parse_args()
 
@@ -106,6 +113,31 @@ def embed_text(client, model_id: str, text: str) -> List[float]:
     return data.get("embedding", [])
 
 
+def compute_content_hash(text: str) -> str:
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def utc_timestamp() -> str:
+    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def is_embedding_current(
+    existing_output: Dict[str, Any],
+    *,
+    content_hash: str,
+    source_version: Any,
+    model_id: str,
+) -> bool:
+    embedding = existing_output.get("embedding")
+    return (
+        isinstance(embedding, list)
+        and len(embedding) > 0
+        and existing_output.get("embedding_content_hash") == content_hash
+        and existing_output.get("embedding_source_version") == source_version
+        and existing_output.get("embedding_model_id") == model_id
+    )
+
+
 def main() -> int:
     args = parse_args()
     input_dir = Path(args.input_dir)
@@ -122,26 +154,57 @@ def main() -> int:
         print(f"No artifacts found in: {input_dir}")
         return 1
 
+    embedded_count = 0
+    skipped_count = 0
+    failed_count = 0
+
     for artifact_path in artifacts:
         artifact = load_json(artifact_path)
         text = build_embedding_text(artifact)
         if not text:
             print(f"Skipping empty artifact: {artifact_path.name}")
+            skipped_count += 1
             continue
+
+        content_hash = compute_content_hash(text)
+        source_version = artifact.get("version")
+        output_path = output_dir / artifact_path.name
+
+        if not args.force and output_path.exists():
+            existing_output = load_json(output_path)
+            if is_embedding_current(
+                existing_output,
+                content_hash=content_hash,
+                source_version=source_version,
+                model_id=args.model_id,
+            ):
+                print(f"Skipping unchanged artifact: {artifact_path.name}")
+                skipped_count += 1
+                continue
 
         try:
             embedding = embed_text(client, args.model_id, text)
         except ClientError as exc:
             print(f"Embedding failed for {artifact_path.name}: {exc}", file=sys.stderr)
+            failed_count += 1
+            print(
+                f"Summary: embedded={embedded_count}, skipped={skipped_count}, failed={failed_count}",
+                file=sys.stderr,
+            )
             return 1
 
         embedded = dict(artifact)
         embedded["embedding"] = embedding
         embedded["embedding_model_id"] = args.model_id
+        embedded["embedding_content_hash"] = content_hash
+        embedded["embedding_generated_at"] = utc_timestamp()
+        embedded["embedding_source_version"] = source_version
 
-        output_path = output_dir / artifact_path.name
         write_json(output_path, embedded)
         print(f"Embedded {artifact_path.name} -> {output_path}")
+        embedded_count += 1
+
+    print(f"Summary: embedded={embedded_count}, skipped={skipped_count}, failed={failed_count}")
 
     return 0
 

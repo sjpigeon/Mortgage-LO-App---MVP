@@ -10,3 +10,5 @@ Notes:
 Build-time embeddings:
 - Run `python scripts/build_seed_embeddings.py` from repo root.
 - Outputs embedded artifacts to `artifacts/seed_v1_embeddings`.
+- Re-embeds only artifacts with changed source version/content hash/model id.
+- Use `python scripts/build_seed_embeddings.py --force` to rebuild all embeddings.
