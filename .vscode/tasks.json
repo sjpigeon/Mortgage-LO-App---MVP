@@ -1,0 +1,30 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "validate-artifacts",
+			"type": "shell",
+			"command": "C:/Users/sjpig/OneDrive/Desktop/Mortgage-LO-App--MVP/.venv/Scripts/python.exe",
+			"args": [
+				"scripts/validate_artifacts.py"
+			]
+		},
+		{
+			"label": "validate-artifacts-cmd",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"C:\\Users\\sjpig\\OneDrive\\Desktop\\Mortgage-LO-App--MVP\\.venv\\Scripts\\python.exe scripts\\validate_artifacts.py"
+			]
+		},
+		{
+			"label": "build-seed-embeddings",
+			"type": "shell",
+			"command": "C:/Users/sjpig/OneDrive/Desktop/Mortgage-LO-App--MVP/.venv/Scripts/python.exe",
+			"args": [
+				"scripts/build_seed_embeddings.py"
+			]
+		}
+	]
+}
