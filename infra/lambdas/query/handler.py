@@ -1,5 +1,7 @@
 import json
 import os
+import uuid
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Tuple
 
 import boto3
@@ -18,6 +20,14 @@ BEDROCK_EMBED_MODEL = os.getenv("BEDROCK_EMBED_MODEL", "amazon.titan-embed-text-
 BEDROCK_REGION = os.getenv("BEDROCK_REGION", os.getenv("AWS_REGION", "us-west-2"))
 DEFAULT_TOP_K = int(os.getenv("RETRIEVAL_TOP_K", "5"))
 MAX_TOP_K = int(os.getenv("RETRIEVAL_TOP_K_MAX", "20"))
+FILTER_ALLOWLIST = {
+    item.strip()
+    for item in os.getenv(
+        "RETRIEVAL_FILTER_ALLOWLIST",
+        "topic,version,section_type,source_key,section_index,chunk_index,doc_id,chunk_id",
+    ).split(",")
+    if item.strip()
+}
 
 
 def _normalized_endpoint() -> str:
@@ -112,6 +122,38 @@ def _parse_event(event: Dict[str, Any]) -> Tuple[str, int, Dict[str, Any]]:
     return question, top_k, metadata_filter
 
 
+def _is_scalar_filter_value(value: Any) -> bool:
+    return isinstance(value, (str, int, float, bool))
+
+
+def _sanitize_metadata_filter(metadata_filter: Dict[str, Any]) -> Tuple[Dict[str, Any], List[str]]:
+    sanitized: Dict[str, Any] = {}
+    rejected_fields: List[str] = []
+
+    for field, raw_value in metadata_filter.items():
+        if field not in FILTER_ALLOWLIST:
+            rejected_fields.append(field)
+            continue
+
+        if raw_value is None:
+            continue
+
+        if isinstance(raw_value, list):
+            cleaned_values = [item for item in raw_value if _is_scalar_filter_value(item)]
+            if cleaned_values:
+                sanitized[field] = cleaned_values
+            else:
+                rejected_fields.append(field)
+            continue
+
+        if _is_scalar_filter_value(raw_value):
+            sanitized[field] = raw_value
+        else:
+            rejected_fields.append(field)
+
+    return sanitized, rejected_fields
+
+
 def _build_filter_clause(metadata_filter: Dict[str, Any]) -> List[Dict[str, Any]]:
     clauses: List[Dict[str, Any]] = []
     for field, value in metadata_filter.items():
@@ -173,36 +215,118 @@ def _normalize_results(hits: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     return results
 
 
+def _summarize_confidence(results: List[Dict[str, Any]]) -> Dict[str, Any]:
+    scores = [result.get("score") for result in results if isinstance(result.get("score"), (int, float))]
+    if not scores:
+        return {
+            "score_max": None,
+            "score_min": None,
+            "score_avg": None,
+            "confidence_band": "none",
+        }
+
+    score_max = max(scores)
+    score_min = min(scores)
+    score_avg = sum(scores) / len(scores)
+
+    if score_max >= 0.8:
+        confidence_band = "high"
+    elif score_max >= 0.5:
+        confidence_band = "medium"
+    else:
+        confidence_band = "low"
+
+    return {
+        "score_max": score_max,
+        "score_min": score_min,
+        "score_avg": score_avg,
+        "confidence_band": confidence_band,
+    }
+
+
 def handler(event, context):
+    query_id = str(uuid.uuid4())
+    request_timestamp = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+
     try:
         question, top_k, metadata_filter = _parse_event(event or {})
     except ValueError as exc:
-        return {"statusCode": 400, "body": json.dumps({"status": "error", "message": str(exc)})}
+        return {
+            "statusCode": 400,
+            "body": json.dumps(
+                {"status": "error", "message": str(exc), "query_id": query_id, "timestamp": request_timestamp}
+            ),
+        }
+
+    sanitized_filter, rejected_filter_fields = _sanitize_metadata_filter(metadata_filter)
 
     endpoint = _normalized_endpoint()
     if not endpoint:
         body = {
             "status": "ok",
+            "query_id": query_id,
+            "timestamp": request_timestamp,
             "question": question,
             "top_k": top_k,
-            "metadata_filter": metadata_filter,
+            "metadata_filter": sanitized_filter,
+            "rejected_filter_fields": rejected_filter_fields,
             "retrieval_count": 0,
             "results": [],
+            "confidence": _summarize_confidence([]),
             "next_step": "missing_opensearch_endpoint",
         }
+        print(
+            json.dumps(
+                {
+                    "retrieval_trace": {
+                        "query_id": query_id,
+                        "timestamp": request_timestamp,
+                        "top_k": top_k,
+                        "metadata_filter": sanitized_filter,
+                        "rejected_filter_fields": rejected_filter_fields,
+                        "retrieval_count": 0,
+                        "confidence": body["confidence"],
+                        "next_step": body["next_step"],
+                    }
+                }
+            )
+        )
         return {"statusCode": 200, "body": json.dumps(body)}
 
     question_embedding = _embed_question(question)
-    hits = _vector_search(question_embedding, top_k, metadata_filter)
+    hits = _vector_search(question_embedding, top_k, sanitized_filter)
     results = _normalize_results(hits)
+    confidence = _summarize_confidence(results)
 
     body = {
         "status": "ok",
+        "query_id": query_id,
+        "timestamp": request_timestamp,
         "question": question,
         "top_k": top_k,
-        "metadata_filter": metadata_filter,
+        "metadata_filter": sanitized_filter,
+        "rejected_filter_fields": rejected_filter_fields,
         "retrieval_count": len(results),
+        "confidence": confidence,
         "results": results,
         "next_step": "llm_answer_generation_pending",
     }
+
+    print(
+        json.dumps(
+            {
+                "retrieval_trace": {
+                    "query_id": query_id,
+                    "timestamp": request_timestamp,
+                    "top_k": top_k,
+                    "metadata_filter": sanitized_filter,
+                    "rejected_filter_fields": rejected_filter_fields,
+                    "retrieval_count": len(results),
+                    "confidence": confidence,
+                    "result_ids": [item.get("id") for item in results],
+                }
+            }
+        )
+    )
+
     return {"statusCode": 200, "body": json.dumps(body)}
