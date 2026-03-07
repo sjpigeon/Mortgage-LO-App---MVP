@@ -24,6 +24,7 @@ encryption_policy_name = limited_name("enc")
 network_policy_name = limited_name("net")
 access_policy_name = limited_name("access")
 index_name = "artifacts"
+aws_region = aws.get_region().name
 
 artifacts_bucket = aws.s3.Bucket(
     "artifactsBucket",
@@ -178,8 +179,15 @@ access_policy = aws_native.opensearchserverless.AccessPolicy(
 lambda_env = {
     "ARTIFACTS_BUCKET": artifacts_bucket.bucket,
     "OPENSEARCH_COLLECTION": collection.name,
+    "OPENSEARCH_ENDPOINT": collection.collection_endpoint,
+    "OPENSEARCH_REGION": aws_region,
     "OPENSEARCH_INDEX": index_name,
+    "OPENSEARCH_VECTOR_DIMENSION": "1024",
+    "ENABLE_EMBED_UPSERT": "true",
     "BEDROCK_EMBED_MODEL": "amazon.titan-embed-text-v2:0",
+    "BEDROCK_REGION": aws_region,
+    "CHUNK_TARGET_CHARS": "900",
+    "CHUNK_OVERLAP_CHARS": "120",
 }
 
 ingest_lambda = aws.lambda_.Function(
