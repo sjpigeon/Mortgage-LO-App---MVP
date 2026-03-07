@@ -1,0 +1,140 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "S3ArtifactsBucket",
+      "Effect": "Allow",
+      "Action": [
+        "s3:CreateBucket",
+        "s3:DeleteBucket",
+        "s3:PutBucketNotification",
+        "s3:GetBucketNotification",
+        "s3:PutBucketPolicy",
+        "s3:GetBucketPolicy",
+        "s3:ListBucket"
+      ],
+      "Resource": "arn:aws:s3:::mortgage-lo-rag-dev-artifacts"
+    },
+    {
+      "Sid": "S3ArtifactsObjects",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": "arn:aws:s3:::mortgage-lo-rag-dev-artifacts/*"
+    },
+    {
+      "Sid": "LambdaAndLogs",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:CreateFunction",
+        "lambda:UpdateFunctionCode",
+        "lambda:UpdateFunctionConfiguration",
+        "lambda:DeleteFunction",
+        "lambda:AddPermission",
+        "lambda:RemovePermission",
+        "lambda:GetFunction",
+        "lambda:ListVersionsByFunction",
+        "lambda:ListTags",
+        "lambda:GetPolicy",
+        "lambda:GetFunctionCodeSigningConfig"
+      ],
+      "Resource": [
+        "arn:aws:lambda:us-west-2:905592002429:function:queryLambda-a72bcf3",
+        "arn:aws:lambda:us-west-2:905592002429:function:ingestLambda-47e173b"
+      ]
+    },
+    {
+      "Sid": "LogsForLambda",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogGroups"
+      ],
+      "Resource": "arn:aws:logs:us-west-2:905592002429:log-group:/aws/lambda/*"
+    },
+    {
+      "Sid": "OpenSearchServerlessCollection",
+      "Effect": "Allow",
+      "Action": [
+        "aoss:CreateCollection",
+        "aoss:DeleteCollection",
+        "aoss:BatchGetCollection",
+        "aoss:UpdateCollection",
+        "aoss:ListCollections"
+      ],
+      "Resource": "arn:aws:aoss:us-west-2:905592002429:collection/ew9a73rn6larukyw056c"
+    },
+    {
+      "Sid": "OpenSearchServerlessPolicies",
+      "Effect": "Allow",
+      "Action": [
+        "aoss:CreateSecurityPolicy",
+        "aoss:GetSecurityPolicy",
+        "aoss:ListSecurityPolicies",
+        "aoss:UpdateSecurityPolicy",
+        "aoss:DeleteSecurityPolicy",
+        "aoss:CreateAccessPolicy",
+        "aoss:GetAccessPolicy",
+        "aoss:UpdateAccessPolicy",
+        "aoss:DeleteAccessPolicy"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "OpenSearchDataPlane",
+      "Effect": "Allow",
+      "Action": [
+        "aoss:APIAccessAll"
+      ],
+      "Resource": "arn:aws:aoss:us-west-2:905592002429:collection/ew9a73rn6larukyw056c"
+    },
+    {
+      "Sid": "BedrockInvoke",
+      "Effect": "Allow",
+      "Action": [
+        "bedrock:InvokeModel"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "IamForPulumi",
+      "Effect": "Allow",
+      "Action": [
+        "iam:CreateRole",
+        "iam:DeleteRole",
+        "iam:GetRole",
+        "iam:GetPolicy",
+        "iam:PutRolePolicy",
+        "iam:DeleteRolePolicy",
+        "iam:AttachRolePolicy",
+        "iam:DetachRolePolicy",
+        "iam:PassRole",
+        "iam:ListRolePolicies",
+        "iam:ListAttachedRolePolicies",
+        "iam:ListRoleTags",
+        "iam:CreatePolicy",
+        "iam:GetPolicyVersion",
+        "iam:ListPolicyTags"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "CloudFormationForCloudControl",
+      "Effect": "Allow",
+      "Action": [
+        "cloudformation:CreateResource",
+        "cloudformation:DeleteResource",
+        "cloudformation:GetResource",
+        "cloudformation:UpdateResource",
+        "cloudformation:GetResourceRequestStatus",
+        "cloudformation:List*"
+      ],
+      "Resource": "arn:aws:cloudformation:us-west-2:905592002429:resource/*"
+    }
+  ]
+}
