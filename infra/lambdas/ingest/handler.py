@@ -18,6 +18,7 @@ OPENSEARCH_INDEX = os.getenv("OPENSEARCH_INDEX", "artifacts")
 OPENSEARCH_ENDPOINT = os.getenv("OPENSEARCH_ENDPOINT", "")
 OPENSEARCH_REGION = os.getenv("OPENSEARCH_REGION", os.getenv("AWS_REGION", "us-west-2"))
 OPENSEARCH_VECTOR_DIMENSION = int(os.getenv("OPENSEARCH_VECTOR_DIMENSION", "1024"))
+DEFAULT_APPROVAL_STATUS = os.getenv("DEFAULT_APPROVAL_STATUS", "approved")
 BEDROCK_EMBED_MODEL = os.getenv("BEDROCK_EMBED_MODEL", "amazon.titan-embed-text-v2:0")
 BEDROCK_REGION = os.getenv("BEDROCK_REGION", os.getenv("AWS_REGION", "us-west-2"))
 ENABLE_EMBED_UPSERT = os.getenv("ENABLE_EMBED_UPSERT", "true").lower() == "true"
@@ -121,6 +122,7 @@ def artifact_to_chunks(artifact: Dict[str, Any], source_key: str) -> List[Dict[s
     doc_id = normalize_doc_id(source_key)
     topic = artifact.get("topic")
     version = artifact.get("version")
+    approval_status = str(artifact.get("approval_status") or DEFAULT_APPROVAL_STATUS).strip().lower()
     prohibited_topics = artifact.get("prohibited_topics_detected", [])
     sections = build_sections(artifact)
 
@@ -146,6 +148,7 @@ def artifact_to_chunks(artifact: Dict[str, Any], source_key: str) -> List[Dict[s
                         "source_key": source_key,
                         "topic": topic,
                         "version": version,
+                        "approval_status": approval_status,
                         "section_type": section_type,
                         "section_index": section_index,
                         "chunk_index": chunk_index,
@@ -240,6 +243,7 @@ def _ensure_index_mapping(vector_dimension: int) -> str:
                         "source_key": {"type": "keyword"},
                         "topic": {"type": "keyword"},
                         "version": {"type": "keyword"},
+                        "approval_status": {"type": "keyword"},
                         "section_type": {"type": "keyword"},
                         "section_index": {"type": "integer"},
                         "chunk_index": {"type": "integer"},

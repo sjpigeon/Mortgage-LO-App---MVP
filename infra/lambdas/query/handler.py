@@ -20,11 +20,12 @@ BEDROCK_EMBED_MODEL = os.getenv("BEDROCK_EMBED_MODEL", "amazon.titan-embed-text-
 BEDROCK_REGION = os.getenv("BEDROCK_REGION", os.getenv("AWS_REGION", "us-west-2"))
 DEFAULT_TOP_K = int(os.getenv("RETRIEVAL_TOP_K", "5"))
 MAX_TOP_K = int(os.getenv("RETRIEVAL_TOP_K_MAX", "20"))
+MANDATORY_METADATA_FILTER = {"approval_status": "approved"}
 FILTER_ALLOWLIST = {
     item.strip()
     for item in os.getenv(
         "RETRIEVAL_FILTER_ALLOWLIST",
-        "topic,version,section_type,source_key,section_index,chunk_index,doc_id,chunk_id",
+        "topic,version,approval_status,section_type,source_key,section_index,chunk_index,doc_id,chunk_id",
     ).split(",")
     if item.strip()
 }
@@ -168,6 +169,23 @@ def _build_filter_clause(metadata_filter: Dict[str, Any]) -> List[Dict[str, Any]
     return clauses
 
 
+def _merge_mandatory_metadata_filter(
+    metadata_filter: Dict[str, Any],
+    rejected_fields: List[str],
+) -> Tuple[Dict[str, Any], List[str]]:
+    effective_filter = dict(metadata_filter)
+    blocked_override_fields: List[str] = []
+
+    for field, required_value in MANDATORY_METADATA_FILTER.items():
+        if field in effective_filter:
+            blocked_override_fields.append(field)
+            if field not in rejected_fields:
+                rejected_fields.append(field)
+        effective_filter[field] = required_value
+
+    return effective_filter, blocked_override_fields
+
+
 def _vector_search(question_embedding: List[float], top_k: int, metadata_filter: Dict[str, Any]) -> List[Dict[str, Any]]:
     filter_clauses = _build_filter_clause(metadata_filter)
 
@@ -259,6 +277,10 @@ def handler(event, context):
         }
 
     sanitized_filter, rejected_filter_fields = _sanitize_metadata_filter(metadata_filter)
+    effective_filter, blocked_override_fields = _merge_mandatory_metadata_filter(
+        sanitized_filter,
+        rejected_filter_fields,
+    )
 
     endpoint = _normalized_endpoint()
     if not endpoint:
@@ -268,7 +290,9 @@ def handler(event, context):
             "timestamp": request_timestamp,
             "question": question,
             "top_k": top_k,
-            "metadata_filter": sanitized_filter,
+            "metadata_filter": effective_filter,
+            "mandatory_metadata_filter": MANDATORY_METADATA_FILTER,
+            "blocked_override_fields": blocked_override_fields,
             "rejected_filter_fields": rejected_filter_fields,
             "retrieval_count": 0,
             "results": [],
@@ -282,7 +306,9 @@ def handler(event, context):
                         "query_id": query_id,
                         "timestamp": request_timestamp,
                         "top_k": top_k,
-                        "metadata_filter": sanitized_filter,
+                        "metadata_filter": effective_filter,
+                        "mandatory_metadata_filter": MANDATORY_METADATA_FILTER,
+                        "blocked_override_fields": blocked_override_fields,
                         "rejected_filter_fields": rejected_filter_fields,
                         "retrieval_count": 0,
                         "confidence": body["confidence"],
@@ -294,7 +320,7 @@ def handler(event, context):
         return {"statusCode": 200, "body": json.dumps(body)}
 
     question_embedding = _embed_question(question)
-    hits = _vector_search(question_embedding, top_k, sanitized_filter)
+    hits = _vector_search(question_embedding, top_k, effective_filter)
     results = _normalize_results(hits)
     confidence = _summarize_confidence(results)
 
@@ -304,7 +330,9 @@ def handler(event, context):
         "timestamp": request_timestamp,
         "question": question,
         "top_k": top_k,
-        "metadata_filter": sanitized_filter,
+        "metadata_filter": effective_filter,
+        "mandatory_metadata_filter": MANDATORY_METADATA_FILTER,
+        "blocked_override_fields": blocked_override_fields,
         "rejected_filter_fields": rejected_filter_fields,
         "retrieval_count": len(results),
         "confidence": confidence,
@@ -319,7 +347,9 @@ def handler(event, context):
                     "query_id": query_id,
                     "timestamp": request_timestamp,
                     "top_k": top_k,
-                    "metadata_filter": sanitized_filter,
+                    "metadata_filter": effective_filter,
+                    "mandatory_metadata_filter": MANDATORY_METADATA_FILTER,
+                    "blocked_override_fields": blocked_override_fields,
                     "rejected_filter_fields": rejected_filter_fields,
                     "retrieval_count": len(results),
                     "confidence": confidence,
