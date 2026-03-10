@@ -1,0 +1,1 @@
+[{"Rules":[{"ResourceType":"collection","Resource":["collection/*"],"Permission":["aoss:*"]},{"ResourceType":"index","Resource":["index/*/*"],"Permission":["aoss:*"]}],"Principal":["arn:aws:iam::905592002429:role/ragLambdaRole-7f504bf"]}]
