@@ -4,6 +4,8 @@ Owner: Scott Pigeon (sjpigeon)
 Last Updated (UTC): 2026-03-10  
 Status: active
 
+How to Trigger Ritual: At session start, message Copilot with **"Start daily ritual"** to run the daily checklist in `docs/README.md`.
+
 ## 1) Current Mission
 - Build a compliance-first mortgage education assistant.
 - Strictly avoid loan-origination behavior (rates, eligibility, underwriting decisions).
