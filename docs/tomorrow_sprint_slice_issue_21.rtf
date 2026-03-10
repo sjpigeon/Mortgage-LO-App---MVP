@@ -1,0 +1,62 @@
+{\rtf1\ansi\ansicpg1252\deff0
+{\fonttbl{\f0 Calibri;}}
+\viewkind4\uc1
+\pard\sa180\sl276\slmult1\f0\fs22\b Tomorrow Sprint Slice (Issue #21 Sub-Issues)\b0\par
+\pard\sa120\sl240\slmult1\f0\fs22
+\b Goal\b0\par
+Deliver a mergeable vertical slice for #63 through #67 that enables retrieval-grounded, policy-constrained LLM orchestration without waiting on #60 live AWS verification.\par
+\par
+\b Recommended PR Strategy\b0\par
+5 small PRs (one per issue), stacked in order, each independently testable and revertible.\par
+\par
+\b PR 1 - #63 System Prompt Template\b0\par
+\b Boundary (in):\b0 Add a versioned system prompt module, immutable prompt ID/version constant, education-only policy text, and unit tests for required sections.\par
+\b Boundary (out):\b0 No LLM call wiring yet; no output validation logic.\par
+\b Acceptance checks:\b0\par
+\pard\li360\sa60\f0\fs22 - Prompt artifact exists in repo and has explicit version.\par
+- Template enforces: retrieved-content-only, no speculation, no financial calculations, deterministic escalation language.\par
+- Tests fail if required guardrail clauses are removed.\par
+\pard\sa120\sl240\slmult1\f0\fs22\par
+\b PR 2 - #64 Prompt Injection Pipeline\b0\par
+\b Boundary (in):\b0 Build prompt assembly pipeline: user question + sanitized retrieval blocks + system prompt version from #63; add input neutralization for user override attempts; log prompt version and retrieval IDs in trace.\par
+\b Boundary (out):\b0 No post-generation leakage scanning (that is #65).\par
+\b Acceptance checks:\b0\par
+\pard\li360\sa60\f0\fs22 - Top-k retrieval chunks injected in deterministic format/order.\par
+- User text cannot alter system policy section.\par
+- Trace includes prompt version + retrieval content IDs for each request.\par
+\pard\sa120\sl240\slmult1\f0\fs22\par
+\b PR 3 - #65 Output Post-Processing Validator\b0\par
+\b Boundary (in):\b0 Add validator pass over generated answer for prohibited leakage patterns (rates, eligibility, qualification, payment-calculation signals), structured violation result, and trace logging.\par
+\b Boundary (out):\b0 No escalation response mapping text (that is #66).\par
+\b Acceptance checks:\b0\par
+\pard\li360\sa60\f0\fs22 - Prohibited patterns are detected and blocked.\par
+- Non-violating grounded responses pass unchanged.\par
+- Violation logs include reason code(s) and matched categories.\par
+\pard\sa120\sl240\slmult1\f0\fs22\par
+\b PR 4 - #66 Escalation Trigger Integration\b0\par
+\b Boundary (in):\b0 Wire validator/retrieval policy failures to canonical escalation templates with deterministic reason-to-template mapping; ensure LLM cannot override escalation output.\par
+\b Boundary (out):\b0 No model config logging additions beyond what already exists.\par
+\b Acceptance checks:\b0\par
+\pard\li360\sa60\f0\fs22 - Same failure input always yields same escalation output.\par
+- Escalation reason is logged and auditable.\par
+- Escalation response bypasses free-form generation path.\par
+\pard\sa120\sl240\slmult1\f0\fs22\par
+\b PR 5 - #67 LLM Model Version Logging\b0\par
+\b Boundary (in):\b0 Complete inference trace envelope with model name/version, temperature, prompt version, retrieval IDs, and decision path marker (answer vs escalation).\par
+\b Boundary (out):\b0 No infra/front-door changes.\par
+\b Acceptance checks:\b0\par
+\pard\li360\sa60\f0\fs22 - Every response has a complete trace envelope.\par
+- Trace fields are present for both normal answers and escalations.\par
+- Missing trace fields fail tests.\par
+\pard\sa120\sl240\slmult1\f0\fs22\par
+\b Execution Order and Day Plan\b0\par
+\pard\li360\sa60\f0\fs22 - Morning: PR 1 (#63) + PR 2 (#64)\par
+- Midday: PR 3 (#65)\par
+- Afternoon: PR 4 (#66) + PR 5 (#67)\par
+- Buffer: fix/review cycle and squash docs updates\par
+\pard\sa120\sl240\slmult1\f0\fs22\par
+\b Definition of Done for Tomorrow\b0\par
+\pard\li360\sa60\f0\fs22 - All 5 PRs open (or merged if review is fast), each with passing tests and explicit acceptance evidence in PR description.\par
+- #21 progress comment posted summarizing completed slices and what remains (API Gateway front door 3.3.6 and #60 live-env verification dependency).\par
+\pard\sa120\sl240\slmult1\f0\fs22
+}
