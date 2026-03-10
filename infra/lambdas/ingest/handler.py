@@ -19,6 +19,7 @@ OPENSEARCH_ENDPOINT = os.getenv("OPENSEARCH_ENDPOINT", "")
 OPENSEARCH_REGION = os.getenv("OPENSEARCH_REGION", os.getenv("AWS_REGION", "us-west-2"))
 OPENSEARCH_VECTOR_DIMENSION = int(os.getenv("OPENSEARCH_VECTOR_DIMENSION", "1024"))
 DEFAULT_APPROVAL_STATUS = os.getenv("DEFAULT_APPROVAL_STATUS", "approved")
+DEFAULT_TOPIC_BOUNDARY_SCOPE = os.getenv("DEFAULT_TOPIC_BOUNDARY_SCOPE", "education_only")
 BEDROCK_EMBED_MODEL = os.getenv("BEDROCK_EMBED_MODEL", "amazon.titan-embed-text-v2:0")
 BEDROCK_REGION = os.getenv("BEDROCK_REGION", os.getenv("AWS_REGION", "us-west-2"))
 ENABLE_EMBED_UPSERT = os.getenv("ENABLE_EMBED_UPSERT", "true").lower() == "true"
@@ -30,6 +31,11 @@ def normalize_doc_id(source_key: str) -> str:
     stem = source_key.rsplit("/", 1)[-1]
     stem = stem.rsplit(".", 1)[0]
     return re.sub(r"[^a-z0-9]+", "-", stem.lower()).strip("-")
+
+
+def normalize_topic_slug(topic: str) -> str:
+    normalized = re.sub(r"[^a-z0-9]+", "-", (topic or "").lower()).strip("-")
+    return normalized or "unknown-topic"
 
 
 def build_sections(artifact: Dict[str, Any]) -> List[Tuple[str, int, str]]:
@@ -120,10 +126,16 @@ def stable_chunk_id(doc_id: str, section_type: str, section_index: int, chunk_te
 
 def artifact_to_chunks(artifact: Dict[str, Any], source_key: str) -> List[Dict[str, Any]]:
     doc_id = normalize_doc_id(source_key)
-    topic = artifact.get("topic")
+    topic = str(artifact.get("topic") or "").strip()
+    topic_slug = normalize_topic_slug(topic)
     version = artifact.get("version")
     approval_status = str(artifact.get("approval_status") or DEFAULT_APPROVAL_STATUS).strip().lower()
+    topic_boundary_scope = str(
+        artifact.get("topic_boundary_scope")
+        or DEFAULT_TOPIC_BOUNDARY_SCOPE
+    ).strip().lower()
     prohibited_topics = artifact.get("prohibited_topics_detected", [])
+    prohibited_topics_count = len([item for item in prohibited_topics if item])
     sections = build_sections(artifact)
 
     chunk_docs: List[Dict[str, Any]] = []
@@ -147,6 +159,8 @@ def artifact_to_chunks(artifact: Dict[str, Any], source_key: str) -> List[Dict[s
                     "metadata": {
                         "source_key": source_key,
                         "topic": topic,
+                        "topic_slug": topic_slug,
+                        "topic_boundary_scope": topic_boundary_scope,
                         "version": version,
                         "approval_status": approval_status,
                         "section_type": section_type,
@@ -154,6 +168,7 @@ def artifact_to_chunks(artifact: Dict[str, Any], source_key: str) -> List[Dict[s
                         "chunk_index": chunk_index,
                         "total_chunks_in_section": total_chunks,
                         "prohibited_topics_detected": prohibited_topics,
+                        "prohibited_topics_detected_count": prohibited_topics_count,
                     },
                 }
             )
@@ -242,6 +257,8 @@ def _ensure_index_mapping(vector_dimension: int) -> str:
                     "properties": {
                         "source_key": {"type": "keyword"},
                         "topic": {"type": "keyword"},
+                        "topic_slug": {"type": "keyword"},
+                        "topic_boundary_scope": {"type": "keyword"},
                         "version": {"type": "keyword"},
                         "approval_status": {"type": "keyword"},
                         "section_type": {"type": "keyword"},
@@ -249,6 +266,7 @@ def _ensure_index_mapping(vector_dimension: int) -> str:
                         "chunk_index": {"type": "integer"},
                         "total_chunks_in_section": {"type": "integer"},
                         "prohibited_topics_detected": {"type": "keyword"},
+                        "prohibited_topics_detected_count": {"type": "integer"},
                     }
                 },
             }

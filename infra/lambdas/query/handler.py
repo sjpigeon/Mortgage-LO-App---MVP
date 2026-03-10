@@ -20,12 +20,35 @@ BEDROCK_EMBED_MODEL = os.getenv("BEDROCK_EMBED_MODEL", "amazon.titan-embed-text-
 BEDROCK_REGION = os.getenv("BEDROCK_REGION", os.getenv("AWS_REGION", "us-west-2"))
 DEFAULT_TOP_K = int(os.getenv("RETRIEVAL_TOP_K", "5"))
 MAX_TOP_K = int(os.getenv("RETRIEVAL_TOP_K_MAX", "20"))
-MANDATORY_METADATA_FILTER = {"approval_status": "approved"}
+RETRIEVAL_AUDIT_VERSION = "1.0"
+
+
+def _parse_csv_values(raw_value: str) -> List[str]:
+    return [item.strip() for item in raw_value.split(",") if item.strip()]
+
+
+def _build_mandatory_metadata_filter() -> Dict[str, Any]:
+    mandatory_filter: Dict[str, Any] = {
+        "approval_status": os.getenv("REQUIRED_APPROVAL_STATUS", "approved").strip().lower(),
+        "topic_boundary_scope": os.getenv("REQUIRED_TOPIC_BOUNDARY_SCOPE", "education_only").strip().lower(),
+    }
+
+    if os.getenv("REQUIRE_NO_PROHIBITED_TOPICS", "true").strip().lower() == "true":
+        mandatory_filter["prohibited_topics_detected_count"] = 0
+
+    allowed_topic_slugs = _parse_csv_values(os.getenv("RETRIEVAL_ALLOWED_TOPIC_SLUGS", ""))
+    if allowed_topic_slugs:
+        mandatory_filter["topic_slug"] = allowed_topic_slugs
+
+    return mandatory_filter
+
+
+MANDATORY_METADATA_FILTER = _build_mandatory_metadata_filter()
 FILTER_ALLOWLIST = {
     item.strip()
     for item in os.getenv(
         "RETRIEVAL_FILTER_ALLOWLIST",
-        "topic,version,approval_status,section_type,source_key,section_index,chunk_index,doc_id,chunk_id",
+        "topic,topic_slug,topic_boundary_scope,version,approval_status,section_type,source_key,section_index,chunk_index,doc_id,chunk_id,prohibited_topics_detected_count",
     ).split(",")
     if item.strip()
 }
@@ -97,7 +120,7 @@ def _embed_question(question: str) -> List[float]:
     return vector
 
 
-def _parse_event(event: Dict[str, Any]) -> Tuple[str, int, Dict[str, Any]]:
+def _parse_event(event: Dict[str, Any]) -> Tuple[str, int, Dict[str, Any], str]:
     payload = event
     if "body" in event and isinstance(event["body"], str):
         try:
@@ -120,7 +143,20 @@ def _parse_event(event: Dict[str, Any]) -> Tuple[str, int, Dict[str, Any]]:
     if not isinstance(metadata_filter, dict):
         metadata_filter = {}
 
-    return question, top_k, metadata_filter
+    session_id = payload.get("session_id")
+    if isinstance(session_id, str):
+        session_id = session_id.strip()
+    else:
+        session_id = ""
+
+    if not session_id:
+        request_context = event.get("requestContext")
+        if isinstance(request_context, dict):
+            context_request_id = request_context.get("requestId")
+            if isinstance(context_request_id, str):
+                session_id = context_request_id.strip()
+
+    return question, top_k, metadata_filter, session_id
 
 
 def _is_scalar_filter_value(value: Any) -> bool:
@@ -262,12 +298,28 @@ def _summarize_confidence(results: List[Dict[str, Any]]) -> Dict[str, Any]:
     }
 
 
+def _build_result_audit_items(results: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    items: List[Dict[str, Any]] = []
+    for result in results:
+        metadata = result.get("metadata") if isinstance(result.get("metadata"), dict) else {}
+        items.append(
+            {
+                "id": result.get("id"),
+                "doc_id": result.get("doc_id"),
+                "chunk_id": result.get("chunk_id"),
+                "version": metadata.get("version"),
+                "score": result.get("score"),
+            }
+        )
+    return items
+
+
 def handler(event, context):
     query_id = str(uuid.uuid4())
     request_timestamp = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
     try:
-        question, top_k, metadata_filter = _parse_event(event or {})
+        question, top_k, metadata_filter, session_id = _parse_event(event or {})
     except ValueError as exc:
         return {
             "statusCode": 400,
@@ -275,6 +327,9 @@ def handler(event, context):
                 {"status": "error", "message": str(exc), "query_id": query_id, "timestamp": request_timestamp}
             ),
         }
+
+    if not session_id:
+        session_id = query_id
 
     sanitized_filter, rejected_filter_fields = _sanitize_metadata_filter(metadata_filter)
     effective_filter, blocked_override_fields = _merge_mandatory_metadata_filter(
@@ -287,15 +342,22 @@ def handler(event, context):
         body = {
             "status": "ok",
             "query_id": query_id,
+            "session_id": session_id,
             "timestamp": request_timestamp,
             "question": question,
             "top_k": top_k,
+            "audit_version": RETRIEVAL_AUDIT_VERSION,
+            "caller_metadata_filter": metadata_filter,
+            "sanitized_metadata_filter": sanitized_filter,
             "metadata_filter": effective_filter,
             "mandatory_metadata_filter": MANDATORY_METADATA_FILTER,
             "blocked_override_fields": blocked_override_fields,
             "rejected_filter_fields": rejected_filter_fields,
             "retrieval_count": 0,
             "results": [],
+            "result_audit_items": [],
+            "result_ids": [],
+            "result_versions": [],
             "confidence": _summarize_confidence([]),
             "next_step": "missing_opensearch_endpoint",
         }
@@ -304,13 +366,20 @@ def handler(event, context):
                 {
                     "retrieval_trace": {
                         "query_id": query_id,
+                        "session_id": session_id,
                         "timestamp": request_timestamp,
                         "top_k": top_k,
+                        "audit_version": RETRIEVAL_AUDIT_VERSION,
+                        "caller_metadata_filter": metadata_filter,
+                        "sanitized_metadata_filter": sanitized_filter,
                         "metadata_filter": effective_filter,
                         "mandatory_metadata_filter": MANDATORY_METADATA_FILTER,
                         "blocked_override_fields": blocked_override_fields,
                         "rejected_filter_fields": rejected_filter_fields,
                         "retrieval_count": 0,
+                        "result_audit_items": [],
+                        "result_ids": [],
+                        "result_versions": [],
                         "confidence": body["confidence"],
                         "next_step": body["next_step"],
                     }
@@ -323,18 +392,34 @@ def handler(event, context):
     hits = _vector_search(question_embedding, top_k, effective_filter)
     results = _normalize_results(hits)
     confidence = _summarize_confidence(results)
+    result_audit_items = _build_result_audit_items(results)
+    result_ids = [item.get("id") for item in results]
+    result_versions = sorted(
+        {
+            item.get("version")
+            for item in result_audit_items
+            if item.get("version")
+        }
+    )
 
     body = {
         "status": "ok",
         "query_id": query_id,
+        "session_id": session_id,
         "timestamp": request_timestamp,
         "question": question,
         "top_k": top_k,
+        "audit_version": RETRIEVAL_AUDIT_VERSION,
+        "caller_metadata_filter": metadata_filter,
+        "sanitized_metadata_filter": sanitized_filter,
         "metadata_filter": effective_filter,
         "mandatory_metadata_filter": MANDATORY_METADATA_FILTER,
         "blocked_override_fields": blocked_override_fields,
         "rejected_filter_fields": rejected_filter_fields,
         "retrieval_count": len(results),
+        "result_audit_items": result_audit_items,
+        "result_ids": result_ids,
+        "result_versions": result_versions,
         "confidence": confidence,
         "results": results,
         "next_step": "llm_answer_generation_pending",
@@ -345,15 +430,21 @@ def handler(event, context):
             {
                 "retrieval_trace": {
                     "query_id": query_id,
+                    "session_id": session_id,
                     "timestamp": request_timestamp,
                     "top_k": top_k,
+                    "audit_version": RETRIEVAL_AUDIT_VERSION,
+                    "caller_metadata_filter": metadata_filter,
+                    "sanitized_metadata_filter": sanitized_filter,
                     "metadata_filter": effective_filter,
                     "mandatory_metadata_filter": MANDATORY_METADATA_FILTER,
                     "blocked_override_fields": blocked_override_fields,
                     "rejected_filter_fields": rejected_filter_fields,
                     "retrieval_count": len(results),
                     "confidence": confidence,
-                    "result_ids": [item.get("id") for item in results],
+                    "result_audit_items": result_audit_items,
+                    "result_ids": result_ids,
+                    "result_versions": result_versions,
                 }
             }
         )

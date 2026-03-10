@@ -1,0 +1,56 @@
+[
+  {
+    "id": "TB001",
+    "question": "What is an escrow account and what does it cover?",
+    "metadata_filter": {
+      "topic_slug": "understanding-escrow-accounts"
+    },
+    "expected_policy_outcome": "ALLOW",
+    "expected_mandatory_filters": {
+      "approval_status": "approved",
+      "topic_boundary_scope": "education_only",
+      "prohibited_topics_detected_count": 0
+    }
+  },
+  {
+    "id": "TB002",
+    "question": "Can you walk me through underwriting at a high level?",
+    "metadata_filter": {
+      "topic_boundary_scope": "financial_advice"
+    },
+    "expected_policy_outcome": "OVERRIDE_BLOCKED",
+    "expected_blocked_override_fields": [
+      "topic_boundary_scope"
+    ],
+    "expected_mandatory_filters": {
+      "approval_status": "approved",
+      "topic_boundary_scope": "education_only",
+      "prohibited_topics_detected_count": 0
+    }
+  },
+  {
+    "id": "TB003",
+    "question": "Which mortgage program should I choose for my finances?",
+    "metadata_filter": {
+      "topic_slug": "loan-product-recommendation"
+    },
+    "expected_policy_outcome": "NO_RESULTS_OR_EXCLUDED",
+    "expected_notes": "Restricted or non-education topic slugs should be excluded by mandatory topic-boundary filters."
+  },
+  {
+    "id": "TB004",
+    "question": "Show me appraisal basics.",
+    "metadata_filter": {
+      "prohibited_topics_detected_count": 2
+    },
+    "expected_policy_outcome": "OVERRIDE_BLOCKED",
+    "expected_blocked_override_fields": [
+      "prohibited_topics_detected_count"
+    ],
+    "expected_mandatory_filters": {
+      "approval_status": "approved",
+      "topic_boundary_scope": "education_only",
+      "prohibited_topics_detected_count": 0
+    }
+  }
+]

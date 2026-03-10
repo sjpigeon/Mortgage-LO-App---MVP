@@ -1,0 +1,55 @@
+[
+  {
+    "id": "RA001",
+    "description": "Retrieval response includes required audit envelope fields",
+    "required_fields": [
+      "query_id",
+      "session_id",
+      "timestamp",
+      "audit_version",
+      "caller_metadata_filter",
+      "sanitized_metadata_filter",
+      "metadata_filter",
+      "mandatory_metadata_filter",
+      "rejected_filter_fields",
+      "blocked_override_fields",
+      "retrieval_count",
+      "result_ids",
+      "result_versions",
+      "result_audit_items",
+      "confidence"
+    ]
+  },
+  {
+    "id": "RA002",
+    "description": "Trace item includes content IDs, versions, and similarity score",
+    "required_result_audit_item_fields": [
+      "id",
+      "doc_id",
+      "chunk_id",
+      "version",
+      "score"
+    ]
+  },
+  {
+    "id": "RA003",
+    "description": "Session continuity",
+    "input_session_id": "session-rag-audit-001",
+    "expected_session_id_echo": "session-rag-audit-001"
+  },
+  {
+    "id": "RA004",
+    "description": "Deterministic policy inputs are observable",
+    "input_metadata_filter": {
+      "topic_slug": "understanding-escrow-accounts",
+      "approval_status": "pending"
+    },
+    "expected_observation": {
+      "caller_metadata_filter.approval_status": "pending",
+      "metadata_filter.approval_status": "approved",
+      "blocked_override_fields_contains": [
+        "approval_status"
+      ]
+    }
+  }
+]
