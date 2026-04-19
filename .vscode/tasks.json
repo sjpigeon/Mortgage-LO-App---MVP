@@ -6,7 +6,11 @@
 			"type": "shell",
 			"command": "C:/Users/sjpig/OneDrive/Desktop/Mortgage-LO-App--MVP/.venv/Scripts/python.exe",
 			"args": [
-				"scripts/validate_artifacts.py"
+				"scripts/validate_artifacts.py",
+				"--schema",
+				"schemas/extraction_artifact.schema.json",
+				"--glob",
+				"artifacts/seed_v1/*.json"
 			]
 		},
 		{
@@ -15,7 +19,7 @@
 			"command": "cmd",
 			"args": [
 				"/c",
-				"C:\\Users\\sjpig\\OneDrive\\Desktop\\Mortgage-LO-App--MVP\\.venv\\Scripts\\python.exe scripts\\validate_artifacts.py"
+				"C:\\Users\\sjpig\\OneDrive\\Desktop\\Mortgage-LO-App--MVP\\.venv\\Scripts\\python.exe scripts\\validate_artifacts.py --schema schemas\\extraction_artifact.schema.json --glob artifacts\\seed_v1\\*.json"
 			]
 		},
 		{
